@@ -53,6 +53,16 @@
                 
                 "loves":"54"
             
+        },
+        {
+            "id":"6",
+            "title":"ChatMusician",
+                "description":"This model is built upon the Würstchen architecture and its main difference to other models like Stable Diffusion is that it is working at a much smaller latent space. Why is this important? The smaller the latent space, the faster you can run inference and the cheaper the training becomes. How small is the latent space? Stable Diffusion uses a compression factor of 8, resulting in a 1024x1024 image being encoded to 128x128. Stable Cascade achieves a compression factor of 42, meaning that it is possible to encode a 1024x1024 image to 24x24, while maintaining crisp reconstructions. The text-conditional model is then trained in the highly compressed latent space. Previous versions of this architecture, achieved a 16x cost reduction over Stable Diffusion 1.5.",
+                "provider":"m-a-p",
+                "code":"import torch \n from diffusers import StableCascadeDecoderPipeline, StableCascadePriorPipeline \n device = 'cuda' \n num_images_per_prompt = 2 \n prior = StableCascadePriorPipeline.from_pretrained('stabilityai/stable-cascade-prior', torch_dtype=torch.bfloat16).to(device) \n decoder = StableCascadeDecoderPipeline.from_pretrained('stabilityai/stable-cascade',  torch_dtype=torch.float16).to(device) \n prompt = 'Anthropomorphic cat dressed as a pilot' \n negative_prompt = '' \n prior_output = prior( prompt=prompt,height=1024,width=1024,negative_prompt=negative_prompt,guidance_scale=4.0,num_images_per_prompt=num_images_per_prompt,num_inference_steps=20) \n decoder_output = decoder(image_embeddings=prior_output.image_embeddings.half(),prompt=prompt,negative_prompt=negative_prompt,guidance_scale=0.0,output_type='pil',num_inference_steps=10).images",
+                "uses":"Research on generative models. \n Safe deployment of models which have the potential to generate harmful content. \n Probing and understanding the limitations and biases of generative models. \n Generation of artworks and use in design and other artistic processes. \n Applications in educational or creative tools.",
+                "loves":"57"
+            
         }
         
         
